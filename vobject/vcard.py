@@ -118,12 +118,15 @@ class VCardTextBehavior(behavior.Behavior):
                 line.encoding_param = cls.base64string
             encoding = getattr(line, 'encoding_param', None)
             if encoding:
-              try:
-                line.value = line.value.decode('base64')
-              except binascii.Error:
-                # Ignore decoding errors caused by invalid base64 values
-                logger.error('Failed to parse vContact value field, setting to an empty string')
-                line.value = ''
+              if encoding == 'quoted-printable':
+                line.value = line.value.decode(encoding)
+              else:
+                try:
+                  line.value = line.value.decode('base64')
+                except binascii.Error:
+                  # Ignore decoding errors caused by invalid base64 values
+                  logger.error('Failed to parse vContact value field, setting to an empty string')
+                  line.value = ''
             else:
                 line.value = stringToTextValues(line.value)[0]
             line.encoded=False
