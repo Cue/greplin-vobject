@@ -119,7 +119,8 @@ class VCardTextBehavior(behavior.Behavior):
             encoding = getattr(line, 'encoding_param', None)
             if encoding:
               if encoding == 'quoted-printable':
-                line.value = line.value.decode(encoding)
+                line.value = line.value.encode('utf-8').decode(encoding)
+
               else:
                 try:
                   line.value = line.value.decode('base64')
