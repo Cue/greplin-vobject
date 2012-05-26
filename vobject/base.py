@@ -1082,8 +1082,12 @@ def readComponents(streamOrString, validate=False, transform=True,
 def readOne(stream, validate=False, transform=True, findBegin=True,
             ignoreUnreadable=False, allowQP=False):
     """Return the first component from stream."""
-    return readComponents(stream, validate, transform, findBegin,
-                          ignoreUnreadable, allowQP).next()
+    try:
+      return readComponents(stream, validate, transform, findBegin,
+                            ignoreUnreadable, allowQP).next()
+    except StopIteration:
+      raise ParseError('Empty vContact')
+
 
 #--------------------------- version registry ----------------------------------
 __behaviorRegistry={}
