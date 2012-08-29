@@ -274,7 +274,10 @@ class ContentLine(VBase):
                 charsets = self.params.pop('CHARSET')
                 if charsets:
                     charset = charsets[0]
-            self.value = unicode(self.value, charset)
+            try:
+              self.value = unicode(self.value, charset)
+            except UnicodeDecodeError as e:
+              raise ParseError(e.message)
 
     @classmethod
     def duplicate(clz, copyit):
