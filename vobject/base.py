@@ -276,7 +276,7 @@ class ContentLine(VBase):
                     charset = charsets[0]
             try:
               self.value = unicode(self.value, charset)
-            except UnicodeDecodeError as e:
+            except (UnicodeDecodeError, LookupError) as e:
               raise ParseError(e.message)
 
     @classmethod
